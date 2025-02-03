@@ -1235,6 +1235,10 @@ int Socket_new(const char* addr, size_t addr_len, int port, SOCKET* sock)
 		rc = SOCKET_ERROR;
 	}
 
+	const char* device = "eth0";
+	if (setsockopt(*sock, SOL_SOCKET, SO_BINDTODEVICE, (void*)&device, sizeof(device)) != 0)
+		Log(LOG_ERROR, -1, "Could not set SO_BINDTODEVICE for socket %d", *sock);
+
 	if (rc != 0)
 		Log(LOG_ERROR, -1, "%s is not a valid IP address", addr_mem);
 	else
